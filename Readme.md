@@ -16,7 +16,7 @@ This is a backend application for managing notes, where authenticated users can 
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/yourusername/notes-backend.git
+    git clone https://github.com/ismahin/note-backend.git
     cd notes-backend
     ```
 
