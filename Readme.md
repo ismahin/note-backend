@@ -1,13 +1,15 @@
 
 # Notes Backend
 
-This is a backend application for managing notes, where authenticated users can create notes and all users can view notes. The application ensures that only logged-in users can create new notes, while anyone can view the notes created by others.
+This is a backend application for managing notes, where authenticated users can create notes and all users can view notes. The application ensures that only logged-in users can create new notes, edit any note, and also can delete note, while anyone can view the notes created by others.
 
 ## Features
 
 - **Create Note:** Logged-in users can create a new note by providing a title and description.
+- **Edit Note:** Logged-in users can edit any existing note.
+- **Delete Note:** Logged-in users can delete any note.
 - **View Notes:** All users, whether logged in or not, can view the notes created by others.
-- **Authentication:** Only authenticated users can create notes.
+- **Authentication:** Only authenticated users can create, edit, and delete notes.
 
 ## Installation
 
@@ -29,9 +31,16 @@ This is a backend application for managing notes, where authenticated users can 
     Create a `.env` file in the root directory and add the following variables:
 
     ```env
-    PORT=your_port_number
-    DATABASE_URL=your_database_url
-    JWT_SECRET=your_jwt_secret
+    PORT = 5000
+    MONGODB_URL = mongodb+srv://{DB_name}:{your-password}@cluster0.5xxi1s7.mongodb.net
+    CORS_ORIGIN = *
+    ACCESS_TOKEN_SECRET = b674dcfde2119be4edd830d24db1b8a5c1f1acbeafb8ea87fc80ee05fb50d84b
+    ACCESS_TOKEN_EXPIRY = 1d
+    REFRESH_TOKEN_SECRET = 3fe0758102e3be0af56339bd0a84087d155f272a2d523031f7f61b3548cbed60
+    REFRESH_TOKEN_SECRET_EXPIRY = 10d
+    CLOUDINARY_API_KEY = your-api-key
+    CLOUDINARY_CLOUD_NAME= your-cloud-name
+    CLOUDINARY_API_SECRET = your-secret
     ```
 
 4. **Run database migrations (if applicable):**
@@ -43,7 +52,7 @@ This is a backend application for managing notes, where authenticated users can 
 5. **Start the server:**
 
     ```bash
-    npm start
+    npm run dev
     ```
 
 ## API Endpoints
@@ -53,28 +62,43 @@ This is a backend application for managing notes, where authenticated users can 
 - **Register User:**
 
     ```http
-    POST /api/register
+    POST /api/customer/auth/register
     ```
 
     Request Body:
     ```json
     {
-        "username": "string",
-        "password": "string"
+    "username": "string",
+    "email": "string",
+    "fullName": "string",
+    "password": "string"
     }
     ```
 
 - **Login User:**
 
     ```http
-    POST /api/login
+    POST /api/customer/auth/login
     ```
 
     Request Body:
     ```json
     {
-        "username": "string",
-        "password": "string"
+    "email":"string",
+    "username":"string",
+    "password":"string"
+    }
+    ```
+    - **Logout User:**
+
+    ```http
+    POST /api/customer/auth/logout
+    ```
+
+    Request Body:
+    ```json
+    {
+        
     }
     ```
 
@@ -83,7 +107,23 @@ This is a backend application for managing notes, where authenticated users can 
 - **Create Note:**
 
     ```http
-    POST /api/notes
+    POST /api/customer/private/createContent
+    ```
+
+    Request Body:
+    ```json
+    {
+        "title": "string",
+        "description": "string"
+    }
+    ```
+
+    *Requires authentication.*
+  
+- **Edit Note:**
+
+    ```http
+    POST /api/customer/private/edit/:id
     ```
 
     Request Body:
@@ -96,21 +136,43 @@ This is a backend application for managing notes, where authenticated users can 
 
     *Requires authentication.*
 
+  - **Delete Note:**
+
+    ```http
+    POST /api/customer/private/delete/:id
+    ```
+
+    Request Body:
+    ```json
+    {
+    
+    }
+    ```
+
+    *Requires authentication.*
+    
+- **All Created Note:**
+
+    ```http
+    POST /api/customer/private/mycontents
+    ```
+
+    Request Body:
+    ```json
+    {
+    
+    }
+    ```
+
+    *Requires authentication.*
+
 - **View Notes:**
 
     ```http
-    GET /api/notes
+    GET /api/customer/public/view
     ```
 
     *Accessible by anyone.*
-
-## Running Tests
-
-To run the tests, use the following command:
-
-```bash
-npm test
-```
 
 ## Contributing
 
@@ -126,4 +188,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For any questions or feedback, please contact [your-email@example.com](mailto:your-email@example.com).
+For any questions or feedback, please contact [mahinshikder01@gmail.com](mahinshikder01@gmail.com).
